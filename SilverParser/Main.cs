@@ -19,12 +19,13 @@ namespace SilverParser {
         
         private List<PURCHASE_PRICE> _main_price_list = new List<PURCHASE_PRICE>();
         private string DATA_BASE = "C:/sqlite/silver_parser.db";
-        private string WEB_SITE = "http://news.yandex.ru/quotes/1506.html";
+        private string WEB_SITE = "https://news.mail.ru/currency.html?type=lme&code=OIL2#lme";
 
         public Main() {
             InitializeComponent();
             
             getTodayList();
+            timer1.Enabled = false;
 
             using (SQLiteConnection conn = new SQLiteConnection(String.Format("Data Source={0}; Version=3;", DATA_BASE))) {
                 try {
@@ -79,30 +80,24 @@ namespace SilverParser {
             StreamReader objReader = new StreamReader(objStream);
             string HTML = objReader.ReadToEnd();
 
-
-
             // Регулярка
-            string pattern = "<tr class=\"b-quote__head\"><td class=\"b-quote__date\">Дата</td><td class=\"b-quote__value\">Курс</td><td class=\"b-quote__change\">Изменение</td></tr><tr class=\"b-quote__day b-quote__last-day\"><td class=\"b-quote__date\">\\d\\d.\\d\\d</td><td class=\"b-quote__value\"><span class=\"b-quote__sgn\"></span>\\d*,\\d*</td><td class=\"b-quote__change\">";
-            RegexOptions options = RegexOptions.Compiled | RegexOptions.Singleline;
-            Regex regex = new Regex(pattern, options);
-            Match match = regex.Match(HTML.ToString());
-            string result = "";
+            string pattern = "<div class=\"s-currency-indextable__text\">Silver</div>"
++ "[\n\t]+</th>"
++ "[\n\t]+<td class=\"s-currency-indextable__curs\">"
++ "[\n\t]+<div class=\"s-currency-indextable__text\">\\d*\\.\\d*</div>";
 
-            while (match.Success) {
-                result += match;
-                match = match.NextMatch();
+            string result = GetRegexFromString(pattern, HTML);
+
+            if (string.IsNullOrEmpty(result)) {
+                labelError.Text = "ОШИБКА ПАРСИНГА! " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+                return;
             }
 
-            if (string.IsNullOrEmpty(result)) return;
+            pattern = "\\d*\\.\\d*";
 
-            result = result.Replace("<tr class=\"b-quote__head\"><td class=\"b-quote__date\">Дата</td><td class=\"b-quote__value\">Курс</td><td class=\"b-quote__change\">Изменение</td></tr><tr class=\"b-quote__day b-quote__last-day\"><td class=\"b-quote__date\">", "");
-            result = result.Replace("</td><td class=\"b-quote__change\">", "");
-            result = result.Replace(
-                String.Format(
-                "{0}</td><td class=\"b-quote__value\"><span class=\"b-quote__sgn\"></span>", DateTime.Now.ToShortDateString().Substring(0, 5)),
-                "");
+            result = GetRegexFromString(pattern, result);
 
-            double _price = double.Parse(result);
+            double _price = double.Parse(result.Replace(".", ","));
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=C:/sqlite/silver_parser.db; Version=3;")) {
                 try {
                     conn.Open();
@@ -140,6 +135,27 @@ namespace SilverParser {
 
             notifyIcon1.BalloonTipText = string.Format("Программа отработала. Стоимость {0} $", _price);
             notifyIcon1.ShowBalloonTip(5000);
+        }
+
+        /// <summary>
+        /// Получение из строки Regex
+        /// </summary>
+        /// <param name="pattern">Это паттерн</param>
+        /// <param name="str">Сама строка из которой брать будем</param>
+        /// <returns>Полученный результат</returns>
+        private string GetRegexFromString(string pattern, string str) {
+            string result = string.Empty;
+
+            RegexOptions options = RegexOptions.Compiled | RegexOptions.Singleline;
+            Regex regex = new Regex(pattern, options);
+            Match match = regex.Match(str);
+
+            while (match.Success) {
+                result += match;
+                match = match.NextMatch();
+            }
+
+            return result;
         }
 
         private void getTodayList() {

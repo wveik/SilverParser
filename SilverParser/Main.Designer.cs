@@ -36,6 +36,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.labelError = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridTodoPrices)).BeginInit();
@@ -49,7 +50,7 @@
             // 
             this.buttonStartParser.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonStartParser.AutoSize = true;
-            this.buttonStartParser.Location = new System.Drawing.Point(12, 366);
+            this.buttonStartParser.Location = new System.Drawing.Point(12, 374);
             this.buttonStartParser.Name = "buttonStartParser";
             this.buttonStartParser.Size = new System.Drawing.Size(104, 23);
             this.buttonStartParser.TabIndex = 0;
@@ -67,7 +68,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(450, 348);
+            this.tabControl1.Size = new System.Drawing.Size(450, 356);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
@@ -76,7 +77,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(442, 322);
+            this.tabPage1.Size = new System.Drawing.Size(442, 330);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Закачки из интернета";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -89,7 +90,7 @@
             this.gridTodoPrices.Location = new System.Drawing.Point(6, 6);
             this.gridTodoPrices.MainView = this.gridView2;
             this.gridTodoPrices.Name = "gridTodoPrices";
-            this.gridTodoPrices.Size = new System.Drawing.Size(430, 310);
+            this.gridTodoPrices.Size = new System.Drawing.Size(430, 318);
             this.gridTodoPrices.TabIndex = 2;
             this.gridTodoPrices.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView2});
@@ -160,11 +161,22 @@
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
+            // labelError
+            // 
+            this.labelError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelError.AutoSize = true;
+            this.labelError.Location = new System.Drawing.Point(13, 401);
+            this.labelError.Name = "labelError";
+            this.labelError.Size = new System.Drawing.Size(10, 13);
+            this.labelError.TabIndex = 2;
+            this.labelError.Text = "-";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 401);
+            this.ClientSize = new System.Drawing.Size(474, 423);
+            this.Controls.Add(this.labelError);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.buttonStartParser);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -197,6 +209,7 @@
         private DevExpress.XtraGrid.Views.Grid.GridView gridView2;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Label labelError;
     }
 }
 
