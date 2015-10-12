@@ -19,7 +19,7 @@ namespace SilverParser {
         
         private List<PURCHASE_PRICE> _main_price_list = new List<PURCHASE_PRICE>();
         private string DATA_BASE = "C:/sqlite/silver_parser.db";
-        private string WEB_SITE = "https://news.mail.ru/currency.html?type=lme&code=OIL2#lme";
+        private string WEB_SITE = "http://www.finanz.ru/birzhevyye-tovary/serebro-cena";
 
         public Main() {
             InitializeComponent();
@@ -81,10 +81,7 @@ namespace SilverParser {
             string HTML = objReader.ReadToEnd();
 
             // Регулярка
-            string pattern = "<div class=\"s-currency-indextable__text\">Silver</div>"
-+ "[\n\t]+</th>"
-+ "[\n\t]+<td class=\"s-currency-indextable__curs\">"
-+ "[\n\t]+<div class=\"s-currency-indextable__text\">\\d*\\.\\d*</div>";
+            string pattern = "<th >\\d*\\,\\d* <span>USD</span></th>";
 
             string result = GetRegexFromString(pattern, HTML);
 
@@ -93,7 +90,7 @@ namespace SilverParser {
                 return;
             }
 
-            pattern = "\\d*\\.\\d*";
+            pattern = "\\d*\\,\\d*";
 
             result = GetRegexFromString(pattern, result);
 
